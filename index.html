@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>4x4 Offroad Jeep — Gaminoz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Play 4x4 Offroad Jeep on Gaminoz — instant HTML5/WebGL gaming." />
+
+  <meta property="og:title" content="4x4 Offroad Jeep — Gaminoz" />
+  <meta property="og:description" content="Play 4x4 Offroad Jeep on Gaminoz — instant HTML5/WebGL gaming." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="cover.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    :root { --bg:#0c0c14; --card:#141426; --text:#e8e8ff; --b1:#ff6a00; --b2:#ff3c00; --b3:#ff9900; }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);height:100%}
+    .wrap{display:grid;grid-template-rows:auto 1fr auto;min-height:100vh}
+    header,footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+    footer{border-bottom:none;border-top:1px solid rgba(255,255,255,.08)}
+    .brand{font-weight:900;background:linear-gradient(90deg,var(--b1),var(--b2),var(--b3));
+      -webkit-background-clip:text;color:transparent;font-size:18px}
+    .canvas{display:flex;align-items:center;justify-content:center;padding:16px}
+    #unityContainer{width:min(1280px,100%);height:min(720px,calc(100vh - 120px));
+      background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;position:relative}
+    .loader{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,rgba(0,0,0,.15),rgba(0,0,0,.35));font:600 14px/1 system-ui,-apple-system,Segoe UI,Roboto}
+    .bar{width:60%;height:8px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden}
+    .bar>i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--b1),var(--b2),var(--b3))}
+    .hint{opacity:.8;margin-top:10px;font-size:12px}
+    .overlay{position:absolute;right:10px;bottom:10px;display:flex;gap:8px}
+    .btn{padding:6px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}
+  </style>
+
+  <!-- relative path so it works on GitHub Pages -->
+  <script defer src="UnityLoader.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header><div class="brand">Gaminoz</div><div>4x4 Offroad Jeep</div></header>
+    <main class="canvas">
+      <div id="unityContainer">
+        <div class="loader" id="unityLoader">
+          <div class="bar"><i id="unityProgress"></i></div>
+          <div class="hint" id="unityHint">Loading…</div>
+        </div>
+        <div class="overlay">
+          <button class="btn" onclick="document.getElementById('unityContainer').requestFullscreen?.()">Fullscreen</button>
+        </div>
+      </div>
+    </main>
+    <footer><div>© Gaminoz Studios</div><div>Use ⬆️⬇️⬅️➡️ — the site won’t scroll while you play.</div></footer>
+  </div>
+
+  <script>
+    function startUnity(){
+      if(!window.UnityLoader){ document.getElementById('unityHint').textContent='UnityLoader not found.'; return; }
+      const bar=document.getElementById('unityProgress'), loader=document.getElementById('unityLoader');
+      const game=UnityLoader.instantiate("unityContainer","4x4 Offroad Jeep.json",{
+        onProgress:function(_inst,pct){ bar.style.width=(pct*100).toFixed(1)+'%'; if(pct>=0.999) loader.style.display='none'; }
+      });
+      window.__unity=game;
+    }
+    if(document.readyState==='complete'||document.readyState==='interactive') startUnity();
+    else document.addEventListener('DOMContentLoaded',startUnity);
+  </script>
+</body>
+</html>
